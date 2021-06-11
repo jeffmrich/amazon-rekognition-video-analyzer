@@ -26,7 +26,11 @@ config/
 #web-ui/bower_components/
 #web-ui/tmp
 lambda/imageprocessor/pytz*
-venv/
+venv
+.venv
+.vscode
+.python-version
+**/coco_dataset
 
 #IDE files
 .idea/

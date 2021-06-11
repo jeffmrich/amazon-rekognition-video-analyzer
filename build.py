@@ -398,6 +398,13 @@ def videocapture(capturerate="30",clientdir="client"):
 
     return
 
+@task
+def videocapturelocal(capturerate="30", clientdir="client"):
+    '''Run the video capture on a local file. Default capture rate is 1 every 30 frames.'''
+    os.chdir(clientdir)
+
+    call(["python", "video_cap_local.py", "--video-file", "video.mp4"])
+
 @task()
 def deletedata(global_params_path="config/global-params.json", cfn_params_path="config/cfn-params.json", image_processor_params_path="config/imageprocessor-params.json"):
     '''DELETE ALL collected frames and metadata in Amazon S3 and Amazon DynamoDB. Use with caution!'''

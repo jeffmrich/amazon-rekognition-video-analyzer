@@ -1,0 +1,6 @@
+pycocotools
+tqdm
+requests
+gluoncv
+mxnet
+boto3

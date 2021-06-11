@@ -1,0 +1,11 @@
+- S3 Bucket
+- EC2 Instance
+- Python
+- venv
+- source .venv/bin/activate
+- pip install --upgrade pip
+- pip install -r requirements.txt
+- cd custom
+- prepare coco
+    - python prepare_coco.py --download-dir ./coco_dataset --categories boat
+    - python prepare_coco.py --download-dir ./coco_dataset --no-download --categories truck
