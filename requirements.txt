@@ -4,3 +4,4 @@ requests
 gluoncv
 mxnet
 boto3
+Pillow

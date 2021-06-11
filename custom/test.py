@@ -9,18 +9,18 @@ import PIL.Image as Image
 import io
 
 #S3 location for images
-s3_bucket = 'bucket'
-s3_key_path_manifest_file = 'path to custom labels manifest file/'
-s3_key_path_images = 'path to images/'
+s3_bucket = 'sagemaker-studio-lot3eggqcy'
+s3_key_path_manifest_file = 'manifes/'
+s3_key_path_images = 'images/'
 s3_path='s3://' + s3_bucket  + '/' + s3_key_path_images
 s3 = boto3.resource('s3')
 
 #Local file information
-local_path='path to input COCO dataset and output Custom Labels manifest/'
-local_images_path='path to COCO images/'
-coco_manifest = 'COCO dataset JSON file name'
+local_path='./coco_dataset/'
+local_images_path='./coco_dataset/train2017/'
+coco_manifest = 'annotations/boat.json'
 coco_json_file = local_path + coco_manifest
-job_name='Custom Labels job name'
+job_name='Custom Labels test'
 cl_manifest_file = 'custom_labels.manifest'
 
 label_attribute ='bounding-box'

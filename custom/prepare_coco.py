@@ -9,7 +9,7 @@ import datetime
 import botocore
 import boto3
 import io
-import Pil.Image as image
+import PIL.Image as image
 from pathlib import Path
 from gluoncv.utils import download, makedirs
 
@@ -167,7 +167,6 @@ class CocoFilter():
         print('Filtered json saved.')
 
 
-
 # class representing a Custom Label JSON line for an image
 class cl_json_line:  
     def __init__(self,job, img):  
@@ -200,9 +199,6 @@ class cl_json_line:
         self.__dict__[job + '-metadata'] = metadata
 
 
-    
-
-
 def parse_args():
     parser = argparse.ArgumentParser(
         description='Initialize MS COCO dataset.',
@@ -220,25 +216,14 @@ def parse_args():
     return args
 
 
-
-
-
-
-
 def download_coco(path, overwrite=False):
     _DOWNLOAD_URLS = [
         ('http://images.cocodataset.org/zips/train2017.zip',
          '10ad623668ab00c62c096f0ed636d6aff41faca5'),
         ('http://images.cocodataset.org/annotations/annotations_trainval2017.zip',
          '8551ee4bb5860311e79dace7e79cb91e432e78b3'),
-        ('http://images.cocodataset.org/zips/val2017.zip',
-         '4950dc9d00dbe1c933ee0170f5797584351d2a41'),
-
-        # ('http://images.cocodataset.org/annotations/stuff_annotations_trainval2017.zip',
-         # '46cdcf715b6b4f67e980b529534e79c2edffe084'),
-        # test2017.zip, for those who want to attend the competition.
-        # ('http://images.cocodataset.org/zips/test2017.zip',
-        #  '4e443f8a2eca6b1dac8a6c57641b67dd40621a49'),
+        # ('http://images.cocodataset.org/zips/val2017.zip',
+        #  '4950dc9d00dbe1c933ee0170f5797584351d2a41')
     ]
     makedirs(path)
     for url, checksum in _DOWNLOAD_URLS:
@@ -255,14 +240,9 @@ if __name__ == '__main__':
         or not os.path.isdir(os.path.join(path, 'val2017')) \
         or not os.path.isdir(os.path.join(path, 'annotations')):
         if args.no_download:
-            # raise ValueError(('{} is not a valid directory, make sure it is present.'
-            #                   ' Or you should not disable "--no-download" to grab it'.format(path)))
             pass
         else:
             download_coco(path, overwrite=args.overwrite)
-    # else:
-    #     raise ValueError(('{} is not a valid directory, make sure it is present.'
-    #                           ' Or you have not downloaded the coco dataset yet'.format(path)))
 
     print(f'Creating custom category: {"".join(args.categories)}')
     input_json = os.path.join(path, 'annotations', 'instances_train2017.json')
@@ -270,30 +250,70 @@ if __name__ == '__main__':
     cf = CocoFilter()
     cf.main(args, input_json, output_json)
 
-    # print(f'Transforming COCO {"".join(args.categories)} into Rekognition Custom manifest file')
-    # s3_bucket = args.bucket
-    # s3_key_path_manifest_file = output_json
-    # s3_key_path_images = "".join(args.categories)
-    # s3_path='s3://' + s3_bucket  + '/' + s3_key_path_images
-    # s3 = boto3.resource('s3')
-    # local_path = path
-    # local_images_path = os.path.join(path, 'train2017')
-    # coco_manifest = os.path.join('annotations', f'{"".join(args.categories)}.json')
-    # coco_json_file = local_path + coco_manifest
-    # job_name = f'Custom Labels job name for {"".join(args.categories)}'
-    # cl_manifest_file = 'custom_labels.manifest'
-    # label_attribute ='bounding-box'
-    # open(local_path + cl_manifest_file, 'w').close()
+    print(f'Transforming COCO {"".join(args.categories)} into Rekognition Custom manifest file')
+    s3_bucket = args.bucket
+    s3_key_path_manifest_file = f'{"".join(args.categories)}/manifest/'
+    s3_key_path_images = f'{"".join(args.categories)}/images/'
+    s3_path='s3://' + s3_bucket  + '/' + s3_key_path_images
+    s3 = boto3.resource('s3')
+    local_path = path+'/'
+    local_images_path = os.path.join(path, 'train2017')
+    coco_manifest = os.path.join('annotations', f'{"".join(args.categories)}.json')
+    coco_json_file = local_path + coco_manifest
+    job_name = f'Custom Labels job name for {"".join(args.categories)}'
+    cl_manifest_file = 'custom_labels.manifest'
+    label_attribute ='bounding-box'
+    open(local_path + cl_manifest_file, 'w').close()
 
-    # print("Getting image, annotations, and categories from COCO file...")
-    # with open(coco_json_file) as f:
-    #     js = json.load(f)
-    #     images = js['images']
-    #     categories = js['categories']
-    #     annotations = js['annotations']
+    print("Getting image, annotations, and categories from COCO file...")
+    with open(coco_json_file) as f:
+        js = json.load(f)
+        images = js['images']
+        categories = js['categories']
+        annotations = js['annotations']
 
-    # print('Images: ' + str(len(images)))
-    # print('annotations: ' + str(len(annotations)))
-    # print('categories: ' + str(len (categories)))
+    print('Images: ' + str(len(images)))
+    print('annotations: ' + str(len(annotations)))
+    print('categories: ' + str(len (categories)))
 
+    print("Creating CL JSON lines...")
+    images_dict = {image['id']: cl_json_line(label_attribute, image) for image in images}
+    print('Parsing annotations...')
+    for annotation in annotations:
+        image=images_dict[annotation['image_id']]
+        cl_annotation = {}
+        cl_class_map={}
+        cl_bounding_box={}
+        cl_bounding_box['left'] = annotation['bbox'][0]
+        cl_bounding_box['top'] = annotation['bbox'][1]
+        cl_bounding_box['width'] = annotation['bbox'][2]
+        cl_bounding_box['height'] = annotation['bbox'][3]
+        cl_bounding_box['class_id'] = annotation['category_id']
+        getattr(image, label_attribute)['annotations'].append(cl_bounding_box)
 
+        for category in categories:
+            if annotation['category_id'] == category['id']:
+                getattr(image, label_attribute + '-metadata')['class-map'][category['id']]=category['name']
+        
+        cl_object={}
+        cl_object['confidence'] = int(1)
+        getattr(image, label_attribute + '-metadata')['objects'].append(cl_object)
+        
+    print('Done parsing annotations')
+    print('Writing Custom Labels manifest...')
+    for im in images_dict.values():
+        with open(local_path+cl_manifest_file, 'a+') as outfile:
+            json.dump(im.__dict__,outfile)
+            outfile.write('\n')
+            outfile.close()
+    
+    print ('Uploading Custom Labels manifest file to S3 bucket')
+    print('Uploading'  + local_path + cl_manifest_file + ' to ' + s3_key_path_manifest_file)
+    print(s3_bucket)
+    s3 = boto3.resource('s3')
+    s3.Bucket(s3_bucket).upload_file(local_path + cl_manifest_file, s3_key_path_manifest_file + cl_manifest_file)
+
+    print ('S3 URL Path to manifest file. ')
+    print('\033[1m s3://' + s3_bucket + '/' + s3_key_path_manifest_file + cl_manifest_file + '\033[0m') 
+    print ('\nAWS CLI s3 sync command to upload your images to S3 bucket. ')
+    print ('\033[1m aws s3 sync ' + local_images_path + ' ' + s3_path + '\033[0m')

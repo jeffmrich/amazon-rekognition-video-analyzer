@@ -82,9 +82,20 @@ def process_image(event, context):
         hour = now.strftime("%H")
 
         try:
-            rekog_response = rekog_client.detect_labels(
+            # code for standar Rekognition call
+            # rekog_response = rekog_client.detect_labels(
+            #     Image={
+            #         'Bytes': img_bytes
+            #     },
+            #     MaxLabels=rekog_max_labels,
+            #     MinConfidence=rekog_min_conf
+            # )
+
+            # Code for Custom Rekognition call
+            rekog_response = rekog_client.detect_custom_labels(
+                ProjectVersionArn='<ARN of the Custom Model',
                 Image={
-                    'Bytes': img_bytes
+                    'Bytes': img_bytes,
                 },
                 MaxLabels=rekog_max_labels,
                 MinConfidence=rekog_min_conf
