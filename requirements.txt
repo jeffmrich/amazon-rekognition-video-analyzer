@@ -5,3 +5,6 @@ gluoncv
 mxnet
 boto3
 Pillow
+python3-venv
+python3-dev
+build-essential
