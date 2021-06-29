@@ -31,6 +31,7 @@ venv
 .vscode
 .python-version
 **/coco_dataset
+.python-version
 
 #IDE files
 .idea/
