@@ -398,7 +398,7 @@ def videocapture(capturerate="30",clientdir="client"):
 
     return
 
-@task
+@task()
 def videocapturelocal(capturerate="30", clientdir="client"):
     '''Run the video capture on a local file. Default capture rate is 1 every 30 frames.'''
     os.chdir(clientdir)
