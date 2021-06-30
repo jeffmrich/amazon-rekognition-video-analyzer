@@ -95,6 +95,7 @@ def main():
     while True:
         # Capture frame-by-frame
         ret, frame = cap.read()
+        print("Debug: OpenCV 'Read' return value: {}".format(ret))
         #cv2.resize(frame, (640, 360));
 
         if ret is False:
