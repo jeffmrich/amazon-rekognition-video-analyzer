@@ -97,7 +97,7 @@ def process_image(event, context):
                 Image={
                     'Bytes': img_bytes,
                 },
-                MaxLabels=rekog_max_labels,
+                # MaxLabels=rekog_max_labels,
                 MinConfidence=rekog_min_conf
             )
         except Exception as e:
@@ -107,7 +107,7 @@ def process_image(event, context):
 
         #Iterate on rekognition labels. Enrich and prep them for storage in DynamoDB
         labels_on_watch_list = []
-        for label in rekog_response['Labels']:
+        for label in rekog_response['CustomLabels']:
             
             lbl = label['Name']
             conf = label['Confidence']
