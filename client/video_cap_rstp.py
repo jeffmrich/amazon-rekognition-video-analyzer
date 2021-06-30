@@ -73,19 +73,19 @@ def encode_and_send_frame(frame, frame_count, enable_kinesis=True, enable_rekog=
 
 
 def main():
-    ip_cam_url = ''
-    argv_len = len(sys.argv)
+    ip_cam_url = "rtsp://gsdemo.viasat.io:1935/live/camera1.sdp"
+    # argv_len = len(sys.argv)
     capture_rate = default_capture_rate
 
-    if argv_len > 1:
-        ip_cam_url = sys.argv[1]
-        print("Debug: ip_cam_url={}".format(ip_cam_url))
-        if argv_len > 2 and sys.argv[2].isdigit():
-            capture_rate = int(sys.argv[2])
-            print("Debug: capture_rate={}".format(capture_rate))
-    else:
-        print("usage: video_cap_ipcam.py <ip-cam-rstp-url> [capture-rate]")
-        return
+    # if argv_len > 1:
+    #     ip_cam_url = sys.argv[1]
+    #     print("Debug: ip_cam_url={}".format(ip_cam_url))
+    #     if argv_len > 2 and sys.argv[2].isdigit():
+    #         capture_rate = int(sys.argv[2])
+    #         print("Debug: capture_rate={}".format(capture_rate))
+    # else:
+    #     print("usage: video_cap_ipcam.py <ip-cam-rstp-url> [capture-rate]")
+    #     return
     
     print("Capturing from '{}' at a rate of 1 every {} frames...".format(ip_cam_url, capture_rate))
     cap = cv2.VideoCapture(str(ip_cam_url), cv2.CAP_FFMPEG) #Use RSTP URL from sys.argv[1] and FFMPEG
