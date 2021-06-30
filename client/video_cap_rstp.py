@@ -20,7 +20,7 @@ kinesis_client = boto3.client("kinesis")
 rekog_client = boto3.client("rekognition")
 
 camera_index = 0 # 0 is usually the built-in webcam
-capture_rate = 30 # Frame capture rate.. every X frames. Positive integer.
+default_capture_rate = 30 # Frame capture rate.. every X frames. Positive integer.
 rekog_max_labels = 123
 rekog_min_conf = 50.0
 
@@ -75,6 +75,7 @@ def encode_and_send_frame(frame, frame_count, enable_kinesis=True, enable_rekog=
 def main():
     ip_cam_url = ''
     argv_len = len(sys.argv)
+    capture_rate = default_capture_rate
 
     if argv_len > 1:
         ip_cam_url = sys.argv[1]
