@@ -44,7 +44,7 @@ def encode_and_send_frame(frame, frame_count, enable_kinesis=True, enable_rekog=
 
         if write_file:
             print("Writing file img_{}.jpg".format(frame_count))
-            target = open("img_{}.jpg".format(frame_count), 'w')
+            target = open("img_{}.jpg".format(frame_count), 'wb')
             target.write(img_bytes)
             target.close()
 
@@ -88,27 +88,27 @@ def main():
         return
     
     print("Capturing from '{}' at a rate of 1 every {} frames...".format(ip_cam_url, capture_rate))
-    cap = cv2.VideoCapture(ip_cam_url, cv2.CAP_FFMPEG) #Use RSTP URL from sys.argv[1] and FFMPEG
+    cap = cv2.VideoCapture(str(ip_cam_url), cv2.CAP_FFMPEG) #Use RSTP URL from sys.argv[1] and FFMPEG
     pool = Pool(processes=3)
 
     frame_count = 0
     while True:
         # Capture frame-by-frame
         ret, frame = cap.read()
-        print("Debug: OpenCV 'Read' return value: {}".format(ret))
         #cv2.resize(frame, (640, 360));
 
         if ret is False:
+            print("Debug: OpenCV returned 'Fasle' value.")
             break
 
         if frame_count % capture_rate == 0:
             # result = pool.apply_async(encode_and_send_frame, (frame, frame_count, True, False, False,))
-            result = pool.apply_async(encode_and_send_frame, (frame, frame_count, True, False, True,))
+            result = pool.apply_async(encode_and_send_frame, (frame, frame_count, True, False, True,)) # Enable local image capture
 
         frame_count += 1
 
         # Display the resulting frame
-        cv2.imshow('frame', frame)
+        # cv2.imshow('frame', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
