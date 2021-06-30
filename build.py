@@ -405,6 +405,21 @@ def videocapturelocal(capturerate="30", clientdir="client"):
 
     call(["python", "video_cap_local.py", "--video-file", "video.mp4"])
 
+    os.chdir("..")
+
+    return
+
+@task()
+def videocapturerstp(videouri,  capturerate="30", clientdir="client"):
+    '''Run the IP camera video capture client using RSTP parameters video URI and frame capture rate.'''
+    os.chdir(clientdir)
+
+    call("python", "video_cap_rstp.py", capturerate)
+
+    os.chdir("..")
+
+    return
+
 @task()
 def deletedata(global_params_path="config/global-params.json", cfn_params_path="config/cfn-params.json", image_processor_params_path="config/imageprocessor-params.json"):
     '''DELETE ALL collected frames and metadata in Amazon S3 and Amazon DynamoDB. Use with caution!'''
