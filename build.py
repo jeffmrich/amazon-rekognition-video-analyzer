@@ -414,7 +414,7 @@ def videocapturerstp(videouri,  capturerate="30", clientdir="client"):
     '''Run the IP camera video capture client using RSTP parameters video URI and frame capture rate.'''
     os.chdir(clientdir)
 
-    call("python", "video_cap_rstp.py", capturerate)
+    call(["python", "video_cap_rstp.py", capturerate])
 
     os.chdir("..")
 
