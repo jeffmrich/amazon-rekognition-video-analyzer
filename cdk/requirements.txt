@@ -1,7 +1,0 @@
-aws-cdk.aws-s3==1.107.0
-aws-cdk.aws-kinesis==1.107.0
-aws-cdk.aws-lambda==1.107.0
-aws-cdk.aws-iam==1.107.0
-aws-cdk.aws-dynamodb==1.107.0
-aws-cdk.aws-lambda-event-sources==1.107.0
--e .
