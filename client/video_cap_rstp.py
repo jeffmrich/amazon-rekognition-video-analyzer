@@ -101,7 +101,8 @@ def main():
             break
 
         if frame_count % capture_rate == 0:
-            result = pool.apply_async(encode_and_send_frame, (frame, frame_count, True, False, False,))
+            # result = pool.apply_async(encode_and_send_frame, (frame, frame_count, True, False, False,))
+            result = pool.apply_async(encode_and_send_frame, (frame, frame_count, True, False, True,))
 
         frame_count += 1
 
