@@ -14,7 +14,7 @@ from multiprocessing import Pool
 import pytz
 
 # Set RSTP to use UDP instead of default TCP
-os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;udp"
+# os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;udp"
 
 kinesis_client = boto3.client("kinesis")
 rekog_client = boto3.client("rekognition")
