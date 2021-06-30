@@ -76,6 +76,8 @@ def main(args):
     # if argv_len > 1 and sys.argv[1].isdigit():
     #     capture_rate = int(sys.argv[1])
 
+    capture_rate = args.capture_rate
+
     cap = cv2.VideoCapture(args.video_file) #Use 0 for built-in camera. Use 1, 2, etc. for attached cameras.
     pool = Pool(processes=3)
 
@@ -106,7 +108,7 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--video-file', type=str, required=True)
-    # parser.add_argument('--capture-rate', type=int, required=True)
+    parser.add_argument('--capture-rate', type=int, required=True)
     args = parser.parse_args()
     main(args)
 

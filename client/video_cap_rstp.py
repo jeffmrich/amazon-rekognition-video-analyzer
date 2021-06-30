@@ -79,8 +79,10 @@ def main():
 
     if argv_len > 1:
         ip_cam_url = sys.argv[1]
+        print("Debug: ip_cam_url={}".format(ip_cam_url))
         if argv_len > 2 and sys.argv[2].isdigit():
             capture_rate = int(sys.argv[2])
+            print("Debug: capture_rate={}".format(capture_rate))
     else:
         print("usage: video_cap_ipcam.py <ip-cam-rstp-url> [capture-rate]")
         return
