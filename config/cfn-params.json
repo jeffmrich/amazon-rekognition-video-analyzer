@@ -1,8 +1,8 @@
 {
-    "SourceS3BucketParameter" : "<NO-DEFAULT>",
+    "SourceS3BucketParameter" : "omjrlambdapkgs",
     "ImageProcessorSourceS3KeyParameter" : "src/lambda_imageprocessor.zip",
     "FrameFetcherSourceS3KeyParameter" : "src/lambda_framefetcher.zip",
-    "FrameS3BucketNameParameter" : "<NO-DEFAULT>",
+    "FrameS3BucketNameParameter" : "omjrvframeimgs",
     "FrameFetcherApiResourcePathPart" : "enrichedframe",
     "ApiGatewayRestApiNameParameter" : "VidAnalyzerRestApi",
     "ApiGatewayStageNameParameter": "development",
