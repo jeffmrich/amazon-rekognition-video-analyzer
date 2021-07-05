@@ -93,7 +93,7 @@ def process_image(event, context):
 
             # Code for Custom Rekognition call
             rekog_response = rekog_client.detect_custom_labels(
-                ProjectVersionArn='<ARN of the Custom Model',
+                ProjectVersionArn='arn:aws:rekognition:us-west-2:666993553008:project/boatsproj/version/boatsproj.2021-06-20T17.19.52/1624234792837',
                 Image={
                     'Bytes': img_bytes,
                 },
