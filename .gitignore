@@ -28,8 +28,8 @@ config/
 lambda/imageprocessor/pytz*
 venv/
 .venv/
-PIL*
-Pil*
+# PIL*
+# Pil*
 __pycache__
 opencv
 
