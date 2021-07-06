@@ -32,6 +32,7 @@ venv
 .python-version
 **/coco_dataset
 .python-version
+__pytcache__
 
 #IDE files
 .idea/
