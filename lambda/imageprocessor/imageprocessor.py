@@ -82,22 +82,11 @@ def process_image(event, context):
         hour = now.strftime("%H")
 
         try:
-            # code for standard Rekognition call
-            # rekog_response = rekog_client.detect_labels(
-            #     Image={
-            #         'Bytes': img_bytes
-            #     },
-            #     MaxLabels=rekog_max_labels,
-            #     MinConfidence=rekog_min_conf
-            # )
-
-            # Code for Custom Rekognition call
-            rekog_response = rekog_client.detect_custom_labels(
-                ProjectVersionArn='arn:aws:rekognition:us-west-2:666993553008:project/boatsproj/version/boatsproj.2021-06-20T17.19.52/1624234792837',
+            rekog_response = rekog_client.detect_labels(
                 Image={
-                    'Bytes': img_bytes,
+                    'Bytes': img_bytes
                 },
-                # MaxLabels=rekog_max_labels,
+                MaxLabels=rekog_max_labels,
                 MinConfidence=rekog_min_conf
             )
         except Exception as e:
@@ -107,7 +96,7 @@ def process_image(event, context):
 
         #Iterate on rekognition labels. Enrich and prep them for storage in DynamoDB
         labels_on_watch_list = []
-        for label in rekog_response['CustomLabels']:
+        for label in rekog_response['Labels']:
             
             lbl = label['Name']
             conf = label['Confidence']
@@ -126,19 +115,12 @@ def process_image(event, context):
             #Convert from float to decimal for DynamoDB
             label['Confidence'] = Decimal(conf)
 
-            # Code for standard rekognition
-            # for instance in label['Instances']:
-            #     instance['BoundingBox']['Width'] = Decimal(instance['BoundingBox']['Width'])
-            #     instance['BoundingBox']['Height'] = Decimal(instance['BoundingBox']['Height'])
-            #     instance['BoundingBox']['Left'] = Decimal(instance['BoundingBox']['Left'])
-            #     instance['BoundingBox']['Top'] = Decimal(instance['BoundingBox']['Top'])
-            #     instance['Confidence'] = Decimal(instance['Confidence'])
-            
-            # Code for rekognition custom
-            label['Geometry']['BoundingBox']['Width'] = Decimal(label['Geometry']['BoundingBox']['Width'])
-            label['Geometry']['BoundingBox']['Height'] = Decimal(label['Geometry']['BoundingBox']['Height'])
-            label['Geometry']['BoundingBox']['Left'] = Decimal(label['Geometry']['BoundingBox']['Left'])
-            label['Geometry']['BoundingBox']['Top'] = Decimal(label['Geometry']['BoundingBox']['Top'])
+            for instance in label['Instances']:
+                instance['BoundingBox']['Width'] = Decimal(instance['BoundingBox']['Width'])
+                instance['BoundingBox']['Height'] = Decimal(instance['BoundingBox']['Height'])
+                instance['BoundingBox']['Left'] = Decimal(instance['BoundingBox']['Left'])
+                instance['BoundingBox']['Top'] = Decimal(instance['BoundingBox']['Top'])
+                instance['Confidence'] = Decimal(instance['Confidence'])
 
         #Send out notification(s), if needed
         if len(labels_on_watch_list) > 0 \
@@ -186,10 +168,10 @@ def process_image(event, context):
             'frame_id': frame_id,
             'processed_timestamp' : processed_timestamp,
             'approx_capture_timestamp' : approx_capture_timestamp,
-            'rekog_labels' : rekog_response['CustomLabels'],
-            # 'rekog_orientation_correction' : 
-            #     rekog_response['OrientationCorrection'] 
-            #     if 'OrientationCorrection' in rekog_response else 'ROTATE_0',
+            'rekog_labels' : rekog_response['Labels'],
+            'rekog_orientation_correction' : 
+                rekog_response['OrientationCorrection'] 
+                if 'OrientationCorrection' in rekog_response else 'ROTATE_0',
             'processed_year_month' : year + mon, #To be used as a Hash Key for DynamoDB GSI
             's3_bucket' : s3_bucket,
             's3_key' : s3_key

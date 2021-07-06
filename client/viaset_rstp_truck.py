@@ -4,6 +4,7 @@
 # or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 import sys
+import os
 import pickle
 import datetime
 import cv2
@@ -11,13 +12,15 @@ import boto3
 import time
 from multiprocessing import Pool
 import pytz
-import argparse
+
+# Set RSTP to use UDP instead of default TCP
+# os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;udp"
 
 kinesis_client = boto3.client("kinesis")
 rekog_client = boto3.client("rekognition")
 
 camera_index = 0 # 0 is usually the built-in webcam
-capture_rate = 30 # Frame capture rate.. every X frames. Positive integer.
+default_capture_rate = 30 # Frame capture rate.. every X frames. Positive integer.
 rekog_max_labels = 123
 rekog_min_conf = 50.0
 
@@ -41,7 +44,7 @@ def encode_and_send_frame(frame, frame_count, enable_kinesis=True, enable_rekog=
 
         if write_file:
             print("Writing file img_{}.jpg".format(frame_count))
-            target = open("img_{}.jpg".format(frame_count), 'w')
+            target = open("img_{}.jpg".format(frame_count), 'wb')
             target.write(img_bytes)
             target.close()
 
@@ -69,16 +72,23 @@ def encode_and_send_frame(frame, frame_count, enable_kinesis=True, enable_rekog=
         print(e)
 
 
-def main(args):
-
+def main():
+    ip_cam_url = "rtsp://gsdemo.viasat.io:1935/live/camera2.sdp"
     # argv_len = len(sys.argv)
+    capture_rate = default_capture_rate
 
-    # if argv_len > 1 and sys.argv[1].isdigit():
-    #     capture_rate = int(sys.argv[1])
-
-    capture_rate = args.capture_rate
-
-    cap = cv2.VideoCapture(args.video_file) #Use 0 for built-in camera. Use 1, 2, etc. for attached cameras.
+    # if argv_len > 1:
+    #     ip_cam_url = sys.argv[1]
+    #     print("Debug: ip_cam_url={}".format(ip_cam_url))
+    #     if argv_len > 2 and sys.argv[2].isdigit():
+    #         capture_rate = int(sys.argv[2])
+    #         print("Debug: capture_rate={}".format(capture_rate))
+    # else:
+    #     print("usage: video_cap_ipcam.py <ip-cam-rstp-url> [capture-rate]")
+    #     return
+    
+    print("Capturing from '{}' at a rate of 1 every {} frames...".format(ip_cam_url, capture_rate))
+    cap = cv2.VideoCapture(str(ip_cam_url), cv2.CAP_FFMPEG) #Use RSTP URL from sys.argv[1] and FFMPEG
     pool = Pool(processes=3)
 
     frame_count = 0
@@ -88,15 +98,17 @@ def main(args):
         #cv2.resize(frame, (640, 360));
 
         if ret is False:
+            print("Debug: OpenCV returned 'Fasle' value.")
             break
 
         if frame_count % capture_rate == 0:
             result = pool.apply_async(encode_and_send_frame, (frame, frame_count, True, False, False,))
+            # result = pool.apply_async(encode_and_send_frame, (frame, frame_count, True, False, True,)) # Enable local image capture
 
         frame_count += 1
 
         # Display the resulting frame
-        cv2.imshow('frame', frame)
+        # cv2.imshow('frame', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
@@ -106,9 +118,5 @@ def main(args):
     return
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--video-file', type=str, required=True)
-    parser.add_argument('--capture-rate', type=int, required=True)
-    args = parser.parse_args()
-    main(args)
+    main()
 

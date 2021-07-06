@@ -26,13 +26,12 @@ config/
 #web-ui/bower_components/
 #web-ui/tmp
 lambda/imageprocessor/pytz*
-venv
-.venv
-.vscode
-.python-version
-**/coco_dataset
-.python-version
-__pytcache__
+venv/
+.venv/
+PIL*
+Pil*
+__pycache__
+opencv
 
 #IDE files
 .idea/

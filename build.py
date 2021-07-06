@@ -368,7 +368,7 @@ def webuiserver(webdir="web-ui/",port=8080):
     
     Handler = http.server.SimpleHTTPRequestHandler
 
-    httpd = socketserver.TCPServer(("0.0.0.0", port), Handler)
+    httpd = socketserver.TCPServer(("127.0.0.1", port), Handler)
 
     print("Starting local Web UI Server in directory '%s' on port %s" % (web_build_dir, port))
     
@@ -393,28 +393,6 @@ def videocapture(capturerate="30",clientdir="client"):
     os.chdir(clientdir)
     
     call(["python", "video_cap.py", capturerate])
-
-    os.chdir("..")
-
-    return
-
-@task()
-def videocapturelocal(capturerate="30", clientdir="client"):
-    '''Run the video capture on a local file. Default capture rate is 1 every 30 frames.'''
-    os.chdir(clientdir)
-
-    call(["python", "video_cap_local.py", "--video-file", "video.mp4" "--capture-rate", capturerate])
-
-    os.chdir("..")
-
-    return
-
-@task()
-def videocapturerstp(videouri, capturerate="30", clientdir="client"):
-    '''Run the IP camera video capture client using RSTP parameters video URI and frame capture rate.'''
-    os.chdir(clientdir)
-
-    call(["python", "video_cap_rstp.py", videouri, capturerate])
 
     os.chdir("..")
 
