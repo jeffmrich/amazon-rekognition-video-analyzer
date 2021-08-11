@@ -98,7 +98,7 @@ def main():
         #cv2.resize(frame, (640, 360));
 
         if ret is False:
-            print("Debug: OpenCV returned 'Fasle' value.")
+            print("Debug: OpenCV returned 'False' value.")
             break
 
         if frame_count % capture_rate == 0:
