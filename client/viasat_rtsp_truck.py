@@ -73,7 +73,7 @@ def encode_and_send_frame(frame, frame_count, enable_kinesis=True, enable_rekog=
 
 
 def main():
-    ip_cam_url = "rtsp://gsdemo.viasat.io:1935/live/camera1.sdp"
+    ip_cam_url = "rtsp://gsdemo.viasat.io:1935/live/camera2.sdp"
     # argv_len = len(sys.argv)
     capture_rate = default_capture_rate
 
@@ -98,7 +98,7 @@ def main():
         #cv2.resize(frame, (640, 360));
 
         if ret is False:
-            print("Debug: OpenCV returned 'Fasle' value.")
+            print("Debug: OpenCV returned 'False' value.")
             break
 
         if frame_count % capture_rate == 0:
