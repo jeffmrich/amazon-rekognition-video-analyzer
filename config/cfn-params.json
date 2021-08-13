@@ -1,8 +1,8 @@
 {
-    "SourceS3BucketParameter" : "overmatch-demo-boats-666993553008",
+    "SourceS3BucketParameter" : "overmatch-demo-666993553008",
     "ImageProcessorSourceS3KeyParameter" : "src/lambda_imageprocessor.zip",
     "FrameFetcherSourceS3KeyParameter" : "src/lambda_framefetcher.zip",
-    "FrameS3BucketNameParameter" : "overmatch-demo-boats-666993553008-imageprocessor",
+    "FrameS3BucketNameParameter" : "overmatch-demo-666993553008-imageprocessor",
     "FrameFetcherApiResourcePathPart" : "enrichedframe",
     "ApiGatewayRestApiNameParameter" : "VidAnalyzerRestApi",
     "ApiGatewayStageNameParameter": "development",
