@@ -19,7 +19,7 @@ Here’s a high-level checklist of what you need to do to setup your development
 
 1. Sign up for an AWS account if you haven't already and create an Administrator User. The steps are published [here](http://docs.aws.amazon.com/lambda/latest/dg/setting-up.html).
 
-2. Ensure that you have Python 3.0+ (for virtual environment support), Pip, groff, and awscli on your machine. Instructions for those vary based on your operating system and OS version.
+2. Ensure that you have Python 3.0+ (for virtual environment support), pip, groff, and awscli on your machine. Instructions for installing these vary based on your operating system and OS version.
 
 3. Create a Python [virtual environment](https://virtualenv.pypa.io/en/stable/) for the project with Virtualenv. This helps keep project’s python dependencies neatly isolated from your Operating System’s default python installation.
 
