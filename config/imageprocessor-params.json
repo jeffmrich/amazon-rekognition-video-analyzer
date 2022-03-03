@@ -1,5 +1,5 @@
 {
-	"s3_bucket" : "amazon-rekognition-video-analyzer-framess3",
+	"s3_bucket" : "amazon-rekognition-video-analyzer-frames3",
 	"s3_key_frames_root" : "frames/",
 
 	"ddb_table" : "EnrichedFrame",
