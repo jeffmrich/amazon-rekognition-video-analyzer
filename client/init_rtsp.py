@@ -73,7 +73,12 @@ def encode_and_send_frame(frame, frame_count, enable_kinesis=True, enable_rekog=
 
 
 def main():
-    ip_cam_url = "rtsp://gsdemo.viasat.io:1935/live/camera2.sdp"
+    #
+    # Define IP web cam URL
+    # Example: 
+    # ip_cam_url = "rtsp://mycam.mydomain.com:1935/path/to/camera1.sdp"
+    #
+    ip_cam_url = ""
     # argv_len = len(sys.argv)
     capture_rate = default_capture_rate
 

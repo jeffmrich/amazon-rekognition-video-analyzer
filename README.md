@@ -19,7 +19,7 @@ Here’s a high-level checklist of what you need to do to setup your development
 
 1. Sign up for an AWS account if you haven't already and create an Administrator User. The steps are published [here](http://docs.aws.amazon.com/lambda/latest/dg/setting-up.html).
 
-2. Ensure that you have Python 3.0+ (for virtual environment support), pip, groff, and awscli on your machine. Instructions for installing these vary based on your operating system and OS version.
+2. Ensure that you have Python 3.0+ (for virtual environment support), pip, groff, httpd, and awscli on your machine. Instructions for installing these vary based on your operating system and OS version.
 
 3. Create a Python [virtual environment](https://virtualenv.pypa.io/en/stable/) for the project with Virtualenv. This helps keep project’s python dependencies neatly isolated from your Operating System’s default python installation.
 
@@ -326,23 +326,10 @@ Here’s sample invocation of the command.
 pynt webuiserver # Starts lightweight HTTP Server on port 8080.
 ```
 
-### The `videocaptureip` and `videocapture` build commands
-
-The videocaptureip command fires up the MJPEG-based video capture client (source code under the client/ directory). This command accepts, as parameters, an MJPEG stream URL and an optional frame capture rate. The capture rate is defined as 1 every X number of frames. Captured frames are packaged, serialized, and sent to the Kinesis Frame Stream. The video capture client for IP cameras uses Open CV 3 to do simple image processing operations on captured frame images – mainly image rotation.
-
-Here’s a sample command invocation.
-
-```bash
-pynt videocaptureip["http://192.168.0.2/video",20] # Captures 1 frame every 20.
-```
-
-On the other hand, the videocapture command (without the trailing 'ip'), fires up a video capture client that captures frames from a camera attached to the machine on which it runs. If you run this command on your laptop, for instance, the client will attempt to access its built-in video camera. This video capture client relies on Open CV 3 to capture video from physically connected cameras. Captured frames are packaged, serialized, and sent to the Kinesis Frame Stream.
-
-Here’s a sample invocation.
-
-```bash
-pynt videocapture[20] # Captures one frame every 20.
-```
+## Configure your IP web cam stream source
+Modify client/init_rtsp.py, setting the URL to your IP web cam on line 76.
+    Example: 
+    ip_cam_url = "rtsp://mycam.mydomain.com:1935/path/to/camera1.sdp"
 
 ## Deploy and run the prototype
 In this section, we are going use project's build commands to deploy and run the prototype in your AWS account. We’ll use the commands to create the prototype's AWS CloudFormation stack, build and serve the Web UI, and run the Video Cap client.
@@ -379,17 +366,15 @@ $ pynt webuiserver #Start the Web UI server on port 8080 by default
 
 ![Empty Web UI](doc/webui-empty.png)
 
-* Now turn on your IP camera or launch the app on your smartphone. Ensure that your camera is accepting connections for streaming MJPEG video over HTTP, and identify the local URL for accessing that stream.
-
-* Then, in a terminal window at the root directory of the project, issue this command:
+* Now turn on your IP camera and initiate stream processing.
 
 ```bash
-$ pynt videocaptureip["<your-ip-cam-mjpeg-url>",<capture-rate>]
+$ cd ~Repos/amazon-rekognition-video-analyzer/client && python init_rtsp.py
 ```
 * Or, if you don’t have an IP camera and would like to use a built-in camera:
 
 ```bash
-$ pynt videocapture[<frame-capture-rate>]
+Check this out
 ```
 
 * Few seconds after you execute this step, the dashed area in the Web UI will auto-populate with captured frames, side by side with labels recognized in them.
