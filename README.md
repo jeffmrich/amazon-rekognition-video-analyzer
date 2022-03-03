@@ -23,8 +23,11 @@ Here’s a high-level checklist of what you need to do to setup your development
 
 3. Create a Python [virtual environment](https://virtualenv.pypa.io/en/stable/) for the project with Virtualenv. This helps keep project’s python dependencies neatly isolated from your Operating System’s default python installation.
 
-	$ mkdir ~/Repos && cd ~/Repos
-	$ /usr/bin/python3 -m venv .venv && source .venv/bin/activate
+```bash
+$ mkdir ~/Repos && cd ~/Repos
+$ /usr/bin/python3 -m venv .venv && source .venv/bin/activate
+
+```
 
 4. Use Pip to [install AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/installing.html). [Configure](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) the AWS CLI. It is recommended that the access keys you configure are associated with an IAM User who has full access to the following:
  - Amazon S3
@@ -53,9 +56,8 @@ Here’s a high-level checklist of what you need to do to setup your development
 9. Use Pip to install [pytz](http://pytz.sourceforge.net/). Pytz is needed for timezone calculations. Use the following commands:
 
 ```bash
-pip install pytz # Install pytz in your virtual python env
-
-pip install pytz -t <path-to-project-dir>/lambda/imageprocessor/ # Install pytz to be packaged and deployed with the Image Processor lambda function
+(.venv) $ pip install pytz # Install pytz in your virtual python env
+(.venv) $ pip install pytz -t <path-to-project-dir>/lambda/imageprocessor/ # Install pytz to be packaged and deployed with the Image Processor lambda function
 ```
 
 Finally, obtain an IP camera. If you don’t have an IP camera, you can use your smartphone with an IP camera app. This is useful in case you want to test things out before investing in an IP camera. Also, you can simply use your laptop’s built-in camera or a connected USB camera. If you use an IP camera, make sure your camera is connected to the same Local Area Network as the Video Capture client.
