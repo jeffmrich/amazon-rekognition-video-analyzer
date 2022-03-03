@@ -17,7 +17,7 @@ Let's go through the steps necessary to get this prototype up and running. If yo
 ## Preparing your development environment
 Here’s a high-level checklist of what you need to do to setup your development environment.
 
-1. Sign up for an AWS account if you haven't already and create an Administrator User. The steps are published [here](http://docs.aws.amazon.com/lambda/latest/dg/setting-up.html).
+1. Sign up for an AWS account if you haven't already and create an Administrator User. The steps are published [here](https://docs.aws.amazon.com/translate/latest/dg/setting-up.html).
 
 2. Ensure that you have Python 3.0+ (for virtual environment support), pip, groff, httpd, and awscli on your machine. Instructions for installing these vary based on your operating system and OS version.
 
