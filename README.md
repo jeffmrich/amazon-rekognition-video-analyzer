@@ -23,8 +23,8 @@ Here’s a high-level checklist of what you need to do to setup your development
 
 3. Create a Python [virtual environment](https://virtualenv.pypa.io/en/stable/) for the project with Virtualenv. This helps keep project’s python dependencies neatly isolated from your Operating System’s default python installation.
 ```bash
-$ mkdir ~/Repos && cd ~/Repos
-$ /usr/bin/python3 -m venv .venv && source .venv/bin/activate
+(.venv) $ mkdir ~/Repos && cd ~/Repos
+(.venv) $ /usr/bin/python3 -m venv .venv && source .venv/bin/activate
 
 ```
 
@@ -44,18 +44,18 @@ $ /usr/bin/python3 -m venv .venv && source .venv/bin/activate
 
 5. Make sure you choose a region where all of the above services are available. Regions us-east-1 (N. Virginia), us-west-2 (Oregon), and eu-west-1 (Ireland) fulfill this criterion. Visit [this page](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/) to learn more about service availability in AWS regions.
 
-6. Use Pip to install [opencv-python](https://github.com/opencv/opencv) 3 python dependencies and then compile, build, and install Open CV 3 (required by Video Cap clients). If you want, or need, to compile yourself, you can follow [this guide](http://www.pyimagesearch.com/2016/12/05/macos-install-opencv-3-and-python-3-5/) for Open CV 3 and Python 3.5 on OS X Sierra. Other guides exist as well for Windows and Raspberry Pi.
+6. Use Pip to install [opencv-python](https://github.com/opencv/opencv). If you need to compile on a Mac, you can follow [this guide](http://www.pyimagesearch.com/2016/12/05/macos-install-opencv-3-and-python-3-5/) for Open CV 3 and Python 3.5 on OS X Sierra. Other guides exist as well for Windows and Raspberry Pi.
 
 7. Use Pip to install [boto3](http://boto3.readthedocs.io/en/latest/). Boto is the Amazon Web Services (AWS) SDK for Python, which allows Python developers to write software that makes use of Amazon services like S3 and EC2. Boto provides an easy to use, object-oriented API as well as low-level direct access to AWS services.
 
 8. Use Pip to install [pynt](https://github.com/rags/pynt). Pynt enables you to write project build scripts in Python.
 
-9. Clone this GitHub repository. Choose a directory path for your project that does not contain spaces (I'll refer to the full path to this directory as _\<path-to-project-dir\>_).
+9. Clone this GitHub repository. Choose a directory path for your project that does not contain spaces e.g. ~/Repos/amazon-rekognition-video-analyzer
 
-10. Use Pip to install [pytz](http://pytz.sourceforge.net/). Pytz is needed for timezone calculations. Use the following commands:
+10. Use Pip to install [pytz](http://pytz.sourceforge.net/). pytz is needed for timezone calculations. Use the following commands:
 ```bash
 (.venv) $ pip install pytz # Install pytz in your virtual python env
-(.venv) $ pip install pytz -t <path-to-project-dir>/lambda/imageprocessor/ # Install pytz to be packaged and deployed with the Image Processor lambda function
+(.venv) $ pip install pytz -t ~/Repos/amazon-rekognition-video-analyzer/lambda/imageprocessor/ # Install pytz to be packaged and deployed with the Image Processor lambda function
 ```
 
 Finally, obtain an IP camera. If you don’t have an IP camera, you can use your smartphone with an IP camera app. This is useful in case you want to test things out before investing in an IP camera. Also, you can simply use your laptop’s built-in camera or a connected USB camera. If you use an IP camera, make sure your camera is connected to the same Local Area Network as the Video Capture client.
@@ -220,7 +220,7 @@ Run this command to package the prototype's AWS Lambda functions and their depen
 
 ```bash
 (.venv) $ pynt packagelambda	# Package both functions and their dependencies into zip files.
-
+or
 (.venv) $ pynt packagelambda[framefetcher]	# Package only Frame Fetcher.
 ```
 
@@ -245,7 +245,7 @@ Here are sample command invocations.
 
 ```bash
 (.venv) $ pynt deploylambda	# Deploy both functions to Amazon S3.
-
+or
 (.venv) $ pynt deploylambda[framefetcher]	# Deploy only Frame Fetcher to Amazon S3.
 ```
 
@@ -327,9 +327,11 @@ Here’s sample invocation of the command.
 ```
 
 ## Configure your IP web cam stream source
-Modify client/init_rtsp.py, setting the URL to your IP web cam on line 76.
-    Example: 
-    ip_cam_url = "rtsp://mycam.mydomain.com:1935/path/to/camera1.sdp"
+Modify client/init_rtsp.py, setting the URL to your IP web cam stream on line 76.
+```bash
+Example: 
+ip_cam_url = "rtsp://mycam.mydomain.com:1935/path/to/camera1.sdp"
+```
 
 ## Deploy and run the prototype
 In this section, we are going use project's build commands to deploy and run the prototype in your AWS account. We’ll use the commands to create the prototype's AWS CloudFormation stack, build and serve the Web UI, and run the Video Cap client.
@@ -340,19 +342,15 @@ In this section, we are going use project's build commands to deploy and run the
 
 ```bash
 (.venv) $ pynt packagelambda #First, package code & configuration files into .zip files
-
 #Command output without errors
 
 (.venv) $ pynt deploylambda #Second, deploy your lambda code to Amazon S3
-
 #Command output without errors
 
 (.venv) $ pynt createstack	# Now, create the prototype's CloudFormation stack
-
 #Command output without errors
 
 (.venv) $ pynt webui	# Build the Web UI
-
 #Command output without errors
 ```
 
@@ -369,7 +367,7 @@ In this section, we are going use project's build commands to deploy and run the
 * Now turn on your IP camera and initiate stream processing.
 
 ```bash
-(.venv) $ cd ~Repos/amazon-rekognition-video-analyzer/client && python init_rtsp.py
+(.venv) $ cd ~/Repos/amazon-rekognition-video-analyzer/client && python init_rtsp.py
 ```
 * Or, if you don’t have an IP camera and would like to use a built-in camera:
 
