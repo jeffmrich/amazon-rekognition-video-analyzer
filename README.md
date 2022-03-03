@@ -22,7 +22,6 @@ Here’s a high-level checklist of what you need to do to setup your development
 2. Ensure that you have Python 3.0+ (for virtual environment support), pip, groff, httpd, and awscli on your machine. Instructions for installing these vary based on your operating system and OS version.
 
 3. Create a Python [virtual environment](https://virtualenv.pypa.io/en/stable/) for the project with Virtualenv. This helps keep project’s python dependencies neatly isolated from your Operating System’s default python installation.
-
 ```bash
 $ mkdir ~/Repos && cd ~/Repos
 $ /usr/bin/python3 -m venv .venv && source .venv/bin/activate
@@ -45,16 +44,15 @@ $ /usr/bin/python3 -m venv .venv && source .venv/bin/activate
 
 5. Make sure you choose a region where all of the above services are available. Regions us-east-1 (N. Virginia), us-west-2 (Oregon), and eu-west-1 (Ireland) fulfill this criterion. Visit [this page](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/) to learn more about service availability in AWS regions.
 
-6. Use Pip to install [Open CV](https://github.com/opencv/opencv) 3 python dependencies and then compile, build, and install Open CV 3 (required by Video Cap clients). You can follow [this guide](http://www.pyimagesearch.com/2016/11/28/macos-install-opencv-3-and-python-2-7/) to get Open CV 3 up and running on OS X Sierra with Python 2.7. There's [another guide](http://www.pyimagesearch.com/2016/12/05/macos-install-opencv-3-and-python-3-5/) for Open CV 3 and Python 3.5 on OS X Sierra. Other guides exist as well for Windows and Raspberry Pi.
+6. Use Pip to install [opencv-python](https://github.com/opencv/opencv) 3 python dependencies and then compile, build, and install Open CV 3 (required by Video Cap clients). If you want, or need, to compile yourself, you can follow [this guide](http://www.pyimagesearch.com/2016/12/05/macos-install-opencv-3-and-python-3-5/) for Open CV 3 and Python 3.5 on OS X Sierra. Other guides exist as well for Windows and Raspberry Pi.
 
-6. Use Pip to install [Boto3](http://boto3.readthedocs.io/en/latest/). Boto is the Amazon Web Services (AWS) SDK for Python, which allows Python developers to write software that makes use of Amazon services like S3 and EC2. Boto provides an easy to use, object-oriented API as well as low-level direct access to AWS services.
+7. Use Pip to install [boto3](http://boto3.readthedocs.io/en/latest/). Boto is the Amazon Web Services (AWS) SDK for Python, which allows Python developers to write software that makes use of Amazon services like S3 and EC2. Boto provides an easy to use, object-oriented API as well as low-level direct access to AWS services.
 
-7. Use Pip to install [Pynt](https://github.com/rags/pynt). Pynt enables you to write project build scripts in Python.
+8. Use Pip to install [pynt](https://github.com/rags/pynt). Pynt enables you to write project build scripts in Python.
 
-8. Clone this GitHub repository. Choose a directory path for your project that does not contain spaces (I'll refer to the full path to this directory as _\<path-to-project-dir\>_).
+9. Clone this GitHub repository. Choose a directory path for your project that does not contain spaces (I'll refer to the full path to this directory as _\<path-to-project-dir\>_).
 
-9. Use Pip to install [pytz](http://pytz.sourceforge.net/). Pytz is needed for timezone calculations. Use the following commands:
-
+10. Use Pip to install [pytz](http://pytz.sourceforge.net/). Pytz is needed for timezone calculations. Use the following commands:
 ```bash
 (.venv) $ pip install pytz # Install pytz in your virtual python env
 (.venv) $ pip install pytz -t <path-to-project-dir>/lambda/imageprocessor/ # Install pytz to be packaged and deployed with the Image Processor lambda function
@@ -78,7 +76,7 @@ Specifies “global” build configuration parameters. It is read by multiple bu
 
 ```json
 {
-    "StackName" : "video-analyzer-stack"
+    "StackName" : "amazon-rekognition-video-analyzer-stack"
 }
 ```
 Parameters:
@@ -200,7 +198,7 @@ Common interactions with the project have been simplified for you. Using pynt, t
 For a list of all available tasks, enter the following command in the root directory of this project:
 
 ```bash
-pynt -l
+(.venv) $ pynt -l
 ```
 
 The output represents the list of build commands available to you:
@@ -221,20 +219,20 @@ This section describes important build commands and how to use them. If you want
 Run this command to package the prototype's AWS Lambda functions and their dependencies (Image Processor and Frame Fetcher) into separate .zip packages (one per function). The deployment packages are created under the `build/` directory.
 
 ```bash
-pynt packagelambda # Package both functions and their dependencies into zip files.
+(.venv) $ pynt packagelambda	# Package both functions and their dependencies into zip files.
 
-pynt packagelambda[framefetcher] # Package only Frame Fetcher.
+(.venv) $ pynt packagelambda[framefetcher]	# Package only Frame Fetcher.
 ```
 
 Currently, only Image Processor requires an external dependency, [pytz](http://pytz.sourceforge.net/). If you add features to Image Processor or Frame Fetcher that require external dependencies, you should install the dependencies using Pip by issuing the following command.
 
 ```bash
-pip install <module-name> -t <path-to-project-dir>/lambda/<lambda-function-dir>
+(.venv) $ pip install <module-name> -t <path-to-project-dir>/lambda/<lambda-function-dir>
 ```
 For example, let's say you want to perform image processing in the Image Processor Lambda function. You may decide on using the [Pillow](http://pillow.readthedocs.io/en/3.0.x/index.html) image processing library. To ensure Pillow is packaged with your Lambda function in one .zip file, issue the following command:
 
 ```bash
-pip install Pillow -t <path-to-project-dir>/lambda/imageprocessor #Install Pillow dependency
+(.venv) $ pip install Pillow -t <path-to-project-dir>/lambda/imageprocessor
 ```
 
 You can find more details on installing AWS Lambda dependencies [here](http://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html).
@@ -246,9 +244,9 @@ Run this command before you run `createstack`. The ```deploylambda``` command up
 Here are sample command invocations.
 
 ```bash
-pynt deploylambda # Deploy both functions to Amazon S3.
+(.venv) $ pynt deploylambda	# Deploy both functions to Amazon S3.
 
-pynt deploylambda[framefetcher] # Deploy only Frame Fetcher to Amazon S3.
+(.venv) $ pynt deploylambda[framefetcher]	# Deploy only Frame Fetcher to Amazon S3.
 ```
 
 ### The `createstack` build command
@@ -259,13 +257,13 @@ Note that you must, first, package and deploy Image Processor and Frame Fetcher 
 You can issue the command as follows:
 
 ```bash
-pynt createstack
+(.venv) $ pynt createstack
 ```
 
 Stack creation should take only a couple of minutes. At any time, you can check on the prototype's stack status either through the AWS CloudFormation console or by issuing the following command.
 
 ```bash
-pynt stackstatus
+(.venv) $ pynt stackstatus
 ```
 
 Congratulations! You’ve just created the prototype's entire architecture in your AWS account.
@@ -279,7 +277,7 @@ First, it empties the Amazon S3 bucket used to store video frame images. Next, i
 You can issue the `deletestack` command as follows.
 
 ```bash
-pynt deletestack
+(.venv) $ pynt deletestack
 ```
 
 As with `createstack`, you can monitor the progress of stack deletion using the `stackstatus` build command.
@@ -293,7 +291,7 @@ Use this command to clear all previously ingested video frames and associated me
 You can issue the `deletedata` command as follows.
 
 ```bash
-pynt deletedata
+(.venv) $ pynt deletedata
 ```
 
 ### The `stackstatus` build command
@@ -304,7 +302,7 @@ You can issue the command as follows.
 
 
 ```bash
-pynt stackstatus # Get the prototype's Stack Status
+(.venv) $ pynt stackstatus	# Get the prototype's Stack Status
 ```
 
 
@@ -315,7 +313,7 @@ Run this command when the prototype's stack has been created (using `createstack
 You can issue the Web UI build command as follows.
 
 ```bash
-pynt webui
+(.venv) $ pynt webui
 ```
 
 ### The `webuiserver` build command
@@ -325,7 +323,7 @@ The webuiserver command starts a local, lightweight, Python-based HTTP server on
 Here’s sample invocation of the command.
 
 ```bash
-pynt webuiserver # Starts lightweight HTTP Server on port 8080.
+(.venv) $ pynt webuiserver	# Starts lightweight HTTP Server on port 8080.
 ```
 
 ## Configure your IP web cam stream source
@@ -341,19 +339,19 @@ In this section, we are going use project's build commands to deploy and run the
 * On your machine, in a command line terminal change into the root directory of the project. Activate your virtual Python environment. Then, enter the following commands:
 
 ```bash
-$ pynt packagelambda #First, package code & configuration files into .zip files
+(.venv) $ pynt packagelambda #First, package code & configuration files into .zip files
 
 #Command output without errors
 
-$ pynt deploylambda #Second, deploy your lambda code to Amazon S3
+(.venv) $ pynt deploylambda #Second, deploy your lambda code to Amazon S3
 
 #Command output without errors
 
-$ pynt createstack #Now, create the prototype's CloudFormation stack
+(.venv) $ pynt createstack	# Now, create the prototype's CloudFormation stack
 
 #Command output without errors
 
-$ pynt webui #Build the Web UI
+(.venv) $ pynt webui	# Build the Web UI
 
 #Command output without errors
 ```
@@ -361,7 +359,7 @@ $ pynt webui #Build the Web UI
 * On your machine, in a separate command line terminal:
 
 ```bash
-$ pynt webuiserver #Start the Web UI server on port 8080 by default
+(.venv) $ pynt webuiserver	# Start the Web UI server on port 8080 by default
 ```
 
 * In your browser, access http://localhost:8080 to access the prototype's Web UI. You should see a screen similar to this:
@@ -371,7 +369,7 @@ $ pynt webuiserver #Start the Web UI server on port 8080 by default
 * Now turn on your IP camera and initiate stream processing.
 
 ```bash
-$ cd ~Repos/amazon-rekognition-video-analyzer/client && python init_rtsp.py
+(.venv) $ cd ~Repos/amazon-rekognition-video-analyzer/client && python init_rtsp.py
 ```
 * Or, if you don’t have an IP camera and would like to use a built-in camera:
 
