@@ -21,7 +21,7 @@ Here’s a high-level checklist of what you need to do to setup your development
 
 2. Ensure that you have Python 3.0+ (for virtual environment support), pip and groff on your machine. Instructions for installing these vary based on your operating system and OS version.
 
-3. Create a Python virtual environment for the project. This helps keep the project’s python dependencies neatly isolated from your Operating System’s default python installation.
+3. Create a Python virtual environment for the project. This helps keep the project’s Python dependencies neatly isolated from your Operating System’s default Python installation.
 ```bash
 $ mkdir ~/Repos && cd ~/Repos
 $ /usr/bin/python3 -m venv .venv && source .venv/bin/activate
@@ -56,7 +56,7 @@ Python 3.6.8
 
 10. Use Pip to install [pytz](http://pytz.sourceforge.net/). pytz is needed for timezone calculations. Use the following commands:
 ```bash
-(.venv) $ pip install pytz # Install pytz in your virtual python env
+(.venv) $ pip install pytz # Install pytz in your virtual Python env
 (.venv) $ pip install pytz -t ~/Repos/amazon-rekognition-video-analyzer/lambda/imageprocessor/ # Install pytz to be packaged and deployed with the Image Processor lambda function
 ```
 
@@ -206,7 +206,7 @@ The output represents the list of build commands available to you:
 
 ![pynt -l output](doc/pynt%20dash%20l.png)
 
-Build commands are implemented as python scripts in the file ```build.py```. The scripts use the AWS Python SDK (Boto) under the hood. They are documented in the following section.
+Build commands are implemented as Python scripts in the file ```build.py```. The scripts use the AWS Python SDK (Boto) under the hood. They are documented in the following section.
 
 >Prior to using these build commands, you must configure the project. Configuration parameters are split across JSON-formatted files located under the config/ directory. Configuration parameters are described in detail in an earlier section.
 
