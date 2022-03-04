@@ -76,9 +76,9 @@ def main():
     #
     # Define IP web cam URL
     # Example: 
-    # ip_cam_url = "rtsp://mycam.mydomain.com:1935/path/to/camera1.sdp"
+    # ip_cam_url = 'rtsp://mycam.mydomain.com:1935/path/to/camera1.sdp'
     #
-    ip_cam_url = ""
+    ip_cam_url = ''
     # argv_len = len(sys.argv)
     capture_rate = default_capture_rate
 
