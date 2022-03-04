@@ -60,7 +60,7 @@ Python 3.6.8
 (.venv) $ pip install pytz -t ~/Repos/amazon-rekognition-video-analyzer/lambda/imageprocessor/ # Install pytz to be packaged and deployed with the Image Processor lambda function
 ```
 
-Finally, obtain an IP web cam and install on the same network as the Video Capture client. Configure and test, as per your particular model's instructions, to confirm functionality.
+Finally, obtain an IP web cam and install, configure and test, as per your particular model's instructions. Ensure that it is accessible from the machine running the video capture software.
 
 ## Configuring the project
 
