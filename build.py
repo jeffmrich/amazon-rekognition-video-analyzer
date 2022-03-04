@@ -376,27 +376,6 @@ def webuiserver(webdir="web-ui/",port=8080):
     
     return
 
-@task()
-def videocaptureip(videouri, capturerate="30", clientdir="client"):
-    '''Run the IP camera video capture client using parameters video URI and frame capture rate.'''
-    os.chdir(clientdir)
-    
-    call(["python", "video_cap_ipcam.py", videouri, capturerate])
-
-    os.chdir("..")
-
-    return
-
-@task()
-def videocapture(capturerate="30",clientdir="client"):
-    '''Run the video capture client with built-in camera. Default capture rate is 1 every 30 frames.'''
-    os.chdir(clientdir)
-    
-    call(["python", "video_cap.py", capturerate])
-
-    os.chdir("..")
-
-    return
 
 @task()
 def deletedata(global_params_path="config/global-params.json", cfn_params_path="config/cfn-params.json", image_processor_params_path="config/imageprocessor-params.json"):
