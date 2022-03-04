@@ -1,8 +1,8 @@
 {
-    "SourceS3BucketParameter" : "amazon-rekognition-video-analyzer-sources3",
+    "SourceS3BucketParameter" : "amazon-rekognition-video-analyzer-source-s3",
     "ImageProcessorSourceS3KeyParameter" : "src/lambda_imageprocessor.zip",
     "FrameFetcherSourceS3KeyParameter" : "src/lambda_framefetcher.zip",
-    "FrameS3BucketNameParameter" : "amazon-rekognition-video-analyzer-frames3",
+    "FrameS3BucketNameParameter" : "amazon-rekognition-video-analyzer-frame-s3",
     "FrameFetcherApiResourcePathPart" : "enrichedframe",
     "ApiGatewayRestApiNameParameter" : "VidAnalyzerRestApi",
     "ApiGatewayStageNameParameter": "development",
