@@ -19,12 +19,14 @@ Here’s a high-level checklist of what you need to do to setup your development
 
 1. Sign up for an AWS account if you haven't already and create an Administrator User. The steps are published [here](https://docs.aws.amazon.com/translate/latest/dg/setting-up.html).
 
-2. Ensure that you have Python 3.0+ (for virtual environment support), pip, groff, httpd, and awscli on your machine. Instructions for installing these vary based on your operating system and OS version.
+2. Ensure that you have Python 3.0+ (for virtual environment support), pip and groff on your machine. Instructions for installing these vary based on your operating system and OS version.
 
-3. Create a Python [virtual environment](https://virtualenv.pypa.io/en/stable/) for the project with Virtualenv. This helps keep project’s python dependencies neatly isolated from your Operating System’s default python installation.
+3. Create a Python virtual environment for the project. This helps keep the project’s python dependencies neatly isolated from your Operating System’s default python installation.
 ```bash
-(.venv) $ mkdir ~/Repos && cd ~/Repos
-(.venv) $ /usr/bin/python3 -m venv .venv && source .venv/bin/activate
+$ mkdir ~/Repos && cd ~/Repos
+$ /usr/bin/python3 -m venv .venv && source .venv/bin/activate
+(.venv) $ python -V
+Python 3.6.8
 
 ```
 
@@ -50,7 +52,7 @@ Here’s a high-level checklist of what you need to do to setup your development
 
 8. Use Pip to install [pynt](https://github.com/rags/pynt). Pynt enables you to write project build scripts in Python.
 
-9. Clone this GitHub repository. Choose a directory path for your project that does not contain spaces e.g. ~/Repos/amazon-rekognition-video-analyzer
+9. Clone this GitHub repository. Choose a directory path for your project that does not contain spaces. In this example, we use ~/Repos/
 
 10. Use Pip to install [pytz](http://pytz.sourceforge.net/). pytz is needed for timezone calculations. Use the following commands:
 ```bash
@@ -58,7 +60,7 @@ Here’s a high-level checklist of what you need to do to setup your development
 (.venv) $ pip install pytz -t ~/Repos/amazon-rekognition-video-analyzer/lambda/imageprocessor/ # Install pytz to be packaged and deployed with the Image Processor lambda function
 ```
 
-Finally, obtain an IP camera. If you don’t have an IP camera, you can use your smartphone with an IP camera app. This is useful in case you want to test things out before investing in an IP camera. Also, you can simply use your laptop’s built-in camera or a connected USB camera. If you use an IP camera, make sure your camera is connected to the same Local Area Network as the Video Capture client.
+Finally, obtain an IP web cam and install on the same network as the Video Capture client. Configure and test, as per your particular model's instructions, to confirm functionality.
 
 ## Configuring the project
 
@@ -190,8 +192,7 @@ Common interactions with the project have been simplified for you. Using pynt, t
 
 - Creating, deleting, and updating the AWS infrastructure stack with AWS CloudFormation
 - Packaging lambda code into .zip files and deploying them into an Amazon S3 bucket
-- Running the video capture client to stream from a built-in laptop webcam or a USB camera
-- Running the video capture client to stream from an IP camera (MJPEG stream)
+- Running the video capture client to stream from an IP web cam (MJPEG stream)
 - Build a simple web user interface (Web UI)
 - Run a lightweight local HTTP server to serve Web UI for development and demo purposes
 
@@ -330,7 +331,7 @@ Here’s sample invocation of the command.
 Modify client/init_rtsp.py, setting the URL to your IP web cam stream on line 76.
 ```bash
 Example: 
-ip_cam_url = "rtsp://mycam.mydomain.com:1935/path/to/camera1.sdp"
+ip_cam_url = 'rtsp://mycam.mydomain.com:1935/path/to/camera1.sdp'
 ```
 
 ## Deploy and run the prototype
@@ -341,17 +342,17 @@ In this section, we are going use project's build commands to deploy and run the
 * On your machine, in a command line terminal change into the root directory of the project. Activate your virtual Python environment. Then, enter the following commands:
 
 ```bash
-(.venv) $ pynt packagelambda #First, package code & configuration files into .zip files
-#Command output without errors
+(.venv) $ pynt packagelambda	# Package code & configuration files into .zip files
+# Command output without errors
 
-(.venv) $ pynt deploylambda #Second, deploy your lambda code to Amazon S3
-#Command output without errors
+(.venv) $ pynt deploylambda	# Deploy your lambda code to Amazon S3
+# Command output without errors
 
-(.venv) $ pynt createstack	# Now, create the prototype's CloudFormation stack
-#Command output without errors
+(.venv) $ pynt createstack	# Create the prototype's CloudFormation stack
+# Command output without errors
 
 (.venv) $ pynt webui	# Build the Web UI
-#Command output without errors
+# Command output without errors
 ```
 
 * On your machine, in a separate command line terminal:
@@ -364,18 +365,15 @@ In this section, we are going use project's build commands to deploy and run the
 
 ![Empty Web UI](doc/webui-empty.png)
 
-* Now turn on your IP camera and initiate stream processing.
+If you are running the web server on a non-local machine, you will need to setup port-forwarding for access.
+
+* Now enable your IP web cam and initiate stream processing.
 
 ```bash
 (.venv) $ cd ~/Repos/amazon-rekognition-video-analyzer/client && python init_rtsp.py
 ```
-* Or, if you don’t have an IP camera and would like to use a built-in camera:
 
-```bash
-Check this out
-```
-
-* Few seconds after you execute this step, the dashed area in the Web UI will auto-populate with captured frames, side by side with labels recognized in them.
+In a few seconds, the dashed area in the Web UI will auto-populate with captured frames, side by side with labels recognized in them.
 
 ## When you are done
 After you are done experimenting with the prototype, perform the following steps to avoid unwanted costs.
