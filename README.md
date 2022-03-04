@@ -187,6 +187,14 @@ Specifies configuration parameters to be used at run-time by the Frame Fetcher l
 
 * `fetch_limit` - The maximum number of video frame metadata items that Frame Fetcher will retrieve from Amazon DynamoDB.
 
+### client/init_rtsp.py
+Initiates web cam stream processing.
+
+* `ip_cam_url` - Your web cam's rtsp stream url e.g.
+```json
+ip_cam_url = 'rtsp://mycam.mydomain.com:1935/path/to/camera1.sdp'
+```
+
 ## Building the prototype
 Common interactions with the project have been simplified for you. Using pynt, the following tasks are automated with simple commands: 
 
@@ -325,13 +333,6 @@ Here’s sample invocation of the command.
 
 ```bash
 (.venv) $ pynt webuiserver	# Starts lightweight HTTP Server on port 8080.
-```
-
-## Configure your IP web cam stream source
-Modify client/init_rtsp.py, setting the URL to your IP web cam stream on line 76.
-```bash
-Example: 
-ip_cam_url = 'rtsp://mycam.mydomain.com:1935/path/to/camera1.sdp'
 ```
 
 ## Deploy and run the prototype
