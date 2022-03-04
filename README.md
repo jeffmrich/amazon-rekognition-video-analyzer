@@ -191,7 +191,7 @@ Specifies configuration parameters to be used at run-time by the Frame Fetcher l
 Initiates web cam stream processing.
 
 * `ip_cam_url` - Your web cam's rtsp stream url e.g.
-```json
+```bash
 ip_cam_url = 'rtsp://mycam.mydomain.com:1935/path/to/camera1.sdp'
 ```
 
